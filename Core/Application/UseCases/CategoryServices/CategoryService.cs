@@ -19,7 +19,11 @@ namespace Application.UseCases.CategoryServices
             return categories.Select( c => new ResultCategoryDto
             {
                 CategoryId = c.CategoryId,
-                CategoryName = c.CategoryName
+                CategoryName = c.CategoryName,
+                ModifiedDate = c.ModifiedDate,
+                CreatedDate = c.CreatedDate,
+                IsActive = c.IsActive,
+                IsDeleted = c.IsDeleted
             }).ToList();
         }
 
@@ -29,7 +33,11 @@ namespace Application.UseCases.CategoryServices
             var result = new GetByIdCategoryDto() 
             {
                 CategoryId = category.CategoryId,   
-                CategoryName = category.CategoryName
+                CategoryName = category.CategoryName,
+                ModifiedDate = category.ModifiedDate,
+                CreatedDate = category.CreatedDate,
+                IsActive = category.IsActive,
+                IsDeleted = category.IsDeleted
             };
 
             return result;
@@ -37,10 +45,13 @@ namespace Application.UseCases.CategoryServices
 
         public async Task<ResultCategoryDto> CreateAsync(CreateCategoryDto model)
         {
-           Category category = new Category()
-           {
-                CategoryName = model.CategoryName
-           };
+            Category category = new Category()
+            {
+                CategoryName = model.CategoryName,
+                IsActive = model.IsActive,
+                CreatedDate = DateTime.UtcNow,
+                IsDeleted = false
+            };
 
             var addedCategory = await _categoryRepository.CreateAsync(category);
 
@@ -48,6 +59,10 @@ namespace Application.UseCases.CategoryServices
             {
                 CategoryId = addedCategory.CategoryId,
                 CategoryName = addedCategory.CategoryName,
+                ModifiedDate = addedCategory.ModifiedDate,
+                CreatedDate = addedCategory.CreatedDate,
+                IsActive = addedCategory.IsActive,
+                IsDeleted = addedCategory.IsDeleted
             };
         }
 
@@ -55,12 +70,19 @@ namespace Application.UseCases.CategoryServices
         {
             Category category = await _categoryRepository.GetByIdAsync(model.CategoryId);
             category.CategoryName = model.CategoryName;
+            category.ModifiedDate = DateTime.UtcNow;
+            category.IsActive = model.IsActive;
+            category.IsDeleted = model.IsDeleted;
 
             var updatedCategory = await _categoryRepository.UpdateAsync(category);
             return new ResultCategoryDto()
             {
                 CategoryId = updatedCategory.CategoryId,
                 CategoryName = updatedCategory.CategoryName,
+                ModifiedDate = updatedCategory.ModifiedDate,
+                CreatedDate = updatedCategory.CreatedDate,
+                IsActive = updatedCategory.IsActive,
+                IsDeleted = updatedCategory.IsDeleted
             };
         }
 
