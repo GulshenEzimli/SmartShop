@@ -7,8 +7,8 @@ namespace Application.UseCases.CategoryServices
 {
     public class CategoryService : ICategoryService
     {
-        private readonly IRepository<Category> _categoryRepository;
-        public CategoryService(IRepository<Category> categoryRepository)
+        private readonly IBaseRepository<Category> _categoryRepository;
+        public CategoryService(IBaseRepository<Category> categoryRepository)
         {
             _categoryRepository = categoryRepository;
         }
@@ -18,7 +18,7 @@ namespace Application.UseCases.CategoryServices
            var categories = await _categoryRepository.GetAllAsync();
             return categories.Select( c => new ResultCategoryDto
             {
-                CategoryId = c.CategoryId,
+                CategoryId = c.Id,
                 CategoryName = c.CategoryName,
                 ModifiedDate = c.ModifiedDate,
                 CreatedDate = c.CreatedDate,
@@ -32,7 +32,7 @@ namespace Application.UseCases.CategoryServices
             var category = await _categoryRepository.GetByIdAsync(id);
             var result = new GetByIdCategoryDto() 
             {
-                CategoryId = category.CategoryId,   
+                CategoryId = category.Id,   
                 CategoryName = category.CategoryName,
                 ModifiedDate = category.ModifiedDate,
                 CreatedDate = category.CreatedDate,
@@ -57,7 +57,7 @@ namespace Application.UseCases.CategoryServices
 
             return new ResultCategoryDto()
             {
-                CategoryId = addedCategory.CategoryId,
+                CategoryId = addedCategory.Id,
                 CategoryName = addedCategory.CategoryName,
                 ModifiedDate = addedCategory.ModifiedDate,
                 CreatedDate = addedCategory.CreatedDate,
@@ -77,7 +77,7 @@ namespace Application.UseCases.CategoryServices
             var updatedCategory = await _categoryRepository.UpdateAsync(category);
             return new ResultCategoryDto()
             {
-                CategoryId = updatedCategory.CategoryId,
+                CategoryId = updatedCategory.Id,
                 CategoryName = updatedCategory.CategoryName,
                 ModifiedDate = updatedCategory.ModifiedDate,
                 CreatedDate = updatedCategory.CreatedDate,

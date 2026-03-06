@@ -1,6 +1,8 @@
-﻿namespace Application.Interfaces
+﻿using Domain.Interfaces;
+
+namespace Application.Interfaces
 {
-    public interface IRepository<T> where T : class
+    public interface IBaseRepository<T> where T : class, IEntity, new()
     {
         Task<List<T>> GetAllAsync();
         Task<T> GetByIdAsync(int id);
